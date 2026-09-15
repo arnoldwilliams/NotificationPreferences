@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:NotificationPreferences.Client.Models"
+             xmlns:viewModels="clr-namespace:NotificationPreferences.Client.ViewModels"
+             x:Class="NotificationPreferences.MauiClient.Views.NotificationPreferencePage"
+             x:DataType="viewModels:NotificationPreferenceViewModel"
+             Title="Notifications">
+
+    <Grid RowDefinitions="Auto,*,Auto">
+
+        <VerticalStackLayout Grid.Row="0" Padding="20,16" Spacing="4">
+            <Label Text="Push notifications"
+                   Style="{StaticResource Headline}"
+                   SemanticProperties.HeadingLevel="Level1" />
+            <Label Text="Choose which updates you want to receive on this device."
+                   Style="{StaticResource SubHeadline}"
+                   SemanticProperties.HeadingLevel="Level2" />
+        </VerticalStackLayout>
+
+        <RefreshView Grid.Row="1"
+                     IsRefreshing="{Binding IsBusy}"
+                     Command="{Binding LoadCommand}">
+            <CollectionView ItemsSource="{Binding Groups}"
+                            IsGrouped="True"
+                            SelectionMode="None">
+
+                <CollectionView.GroupHeaderTemplate>
+                    <DataTemplate x:DataType="models:NotificationCategoryGroup">
+                        <Grid Padding="20,18,20,8" ColumnDefinitions="*,Auto">
+                            <Label Grid.Column="0"
+                                   Text="{Binding DisplayName}"
+                                   FontAttributes="Bold"
+                                   FontSize="17"
+                                   VerticalOptions="End" />
+                            <Label Grid.Column="1"
+                                   Text="{Binding TopicCountLabel}"
+                                   FontSize="12"
+                                   TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray400}}"
+                                   VerticalOptions="End" />
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.GroupHeaderTemplate>
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="viewModels:TopicPreferenceViewModel">
+                        <Grid Padding="20,4" ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                            <VerticalStackLayout Grid.Column="0" Spacing="2">
+                                <Label Text="{Binding DisplayName}"
+                                       FontSize="16"
+                                       LineBreakMode="TailTruncation" />
+                                <Label Text="{Binding Description}"
+                                       IsVisible="{Binding HasDescription}"
+                                       FontSize="12"
+                                       LineBreakMode="WordWrap"
+                                       TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray400}}" />
+                            </VerticalStackLayout>
+
+                            <Switch Grid.Column="1"
+                                    IsToggled="{Binding IsSubscribed, Mode=TwoWay}"
+                                    VerticalOptions="Center"
+                                    SemanticProperties.Description="{Binding DisplayName}"
+                                    SemanticProperties.Hint="Turns this notification topic on or off" />
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+
+                <CollectionView.EmptyView>
+                    <Label Text="No notification options are available right now."
+                           Padding="20,40"
+                           HorizontalTextAlignment="Center"
+                           TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray400}}" />
+                </CollectionView.EmptyView>
+            </CollectionView>
+        </RefreshView>
+
+        <ActivityIndicator Grid.Row="1"
+                           IsRunning="{Binding IsBusy}"
+                           IsVisible="{Binding IsBusy}"
+                           VerticalOptions="Center"
+                           HorizontalOptions="Center" />
+
+        <VerticalStackLayout Grid.Row="2" Padding="20,12" Spacing="8">
+            <Border IsVisible="{Binding HasError}"
+                    Stroke="{AppThemeBinding Light={StaticResource Gray300}, Dark={StaticResource Gray600}}"
+                    StrokeShape="RoundRectangle 8"
+                    Padding="12">
+                <Label Text="{Binding ErrorMessage}"
+                       TextColor="{AppThemeBinding Light={StaticResource Gray900}, Dark={StaticResource White}}"
+                       FontSize="13" />
+            </Border>
+
+            <Label Text="{Binding StatusMessage}"
+                   IsVisible="{Binding HasStatusMessage}"
+                   FontSize="13"
+                   TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray400}}" />
+
+            <Button Text="Save preferences"
+                    Command="{Binding SaveCommand}"
+                    IsEnabled="{Binding CanSave}"
+                    HorizontalOptions="Fill" />
+        </VerticalStackLayout>
+    </Grid>
+
+</ContentPage>

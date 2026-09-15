@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="NotificationPreferences.MauiClient.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Title="NotificationPreferences.MauiClient">
+
+    <!-- Shell content is composed in code-behind so the page can be resolved from the
+         service container (a DataTemplate here would use Activator.CreateInstance and
+         fail on the page's constructor injection). -->
+
+</Shell>
