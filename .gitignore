@@ -1,0 +1,22 @@
+## .NET build output
+bin/
+obj/
+*.user
+*.suo
+
+## Test results
+[Tt]est[Rr]esult*/
+*.trx
+*.coverage
+coverage*.json
+coverage*.xml
+coverage*.info
+
+## Rider / VS
+.idea/
+.vs/
+*.DotSettings.user
+
+## Local secrets / overrides
+appsettings.Local.json
+appsettings.*.Local.json
